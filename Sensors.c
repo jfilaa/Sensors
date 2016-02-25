@@ -10,7 +10,7 @@
 
 #if defined(__linux__)
  #include <linux/i2c-dev.h>
- //#include "i2cbusses.h"
+ #include "i2cbusses.h"
 #endif // __linux__
 
 #include "stdio.h"
