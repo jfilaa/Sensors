@@ -41,6 +41,7 @@ void PrintArray(uint8_t* Data, uint8_t Len)
 uint8_t HAL_ReadReg(uint8_t DeviceAddr, uint8_t RegAddr, uint8_t NumByteToRead, uint8_t* Data)
 {
 #if defined(__linux__)
+	int res;
 	res = i2c_smbus_read_byte_data(file, daddress);
 
 	if (res < 0)
@@ -58,6 +59,7 @@ uint8_t HAL_ReadReg(uint8_t DeviceAddr, uint8_t RegAddr, uint8_t NumByteToRead, 
 uint8_t HAL_WriteReg(uint8_t DeviceAddr, uint8_t RegAddr, uint8_t NumByteToWrite, uint8_t* Data)
 {
 #if defined(__linux__)
+	int res;
 	res = i2c_smbus_write_byte(file, daddress);
 	if (res < 0) fprintf(stderr, "Warning - write failed\n");
 #else
@@ -89,6 +91,9 @@ int main(int argc, char* argv[])
 
 	// open I2C
 #if defined(__linux__) // only Linux supported
+	int res, i2cbus, address, size, file;
+	int daddress;
+	char filename[20] = "/dev/i2c-1";
 	file = open_i2c_dev(i2cbus, filename, sizeof(filename), 0); // open I2C as file
 
 	if (file < 0 || check_funcs(file, size, daddress, pec) || set_slave_addr(file, address, force)) exit(1); // check file
